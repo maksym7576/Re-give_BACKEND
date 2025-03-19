@@ -1,23 +1,11 @@
 class Product {
-    constructor(id, name, description, uid, imageUrl, objectType, location) {
-        this.id = id;
+    constructor(name, description, uid, imageUrl, objectType, location) {
         this.name = name;
         this.description = description;
         this.uid = uid;
         this.imageUrl = imageUrl;
         this.objectType = objectType;
         this.location = location;
-    }
-
-    get id() {
-        return this._id;
-    }
-
-    set id(value) {
-        if (typeof value !== 'string') {
-            throw new Error('ID debe ser una cadena');
-        }
-        this._id = value;
     }
 
     get name() {

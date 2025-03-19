@@ -26,15 +26,19 @@ const getProductById = async (id) => {
 };
 
 const createProduct = async (product) => {
-    const productRef = db.collection('products').doc(product.id);
-    await productRef.set({
+    const productRef = db.collection('products').doc(); // Este método genera un ID automáticamente
+    const newProduct = {
         name: product.name,
         description: product.description,
         uid: product.uid,
         imageUrl: product.imageUrl,
         objectType: product.objectType,
         location: product.location,
-    });
+    };
+    await productRef.set(newProduct);
+
+    product.id = productRef.id;
+    return product;
 };
 
 const updateProduct = async (id, product) => {
