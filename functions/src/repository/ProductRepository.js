@@ -14,15 +14,7 @@ const getProductById = async (id) => {
         throw new Error('Product not found');
     }
     const data = doc.data();
-    return new Product(
-        doc.id,
-        data.name,
-        data.description,
-        data.uid,
-        data.imageUrl,
-        data.objectType,
-        data.location
-    );
+    return new Product(data.name, data.description, data.uid, data.imageUrl, data.objectType, data.location);
 };
 
 const createProduct = async (product) => {
@@ -36,7 +28,6 @@ const createProduct = async (product) => {
         location: product.location,
     };
     await productRef.set(newProduct);
-
     product.id = productRef.id;
     return product;
 };

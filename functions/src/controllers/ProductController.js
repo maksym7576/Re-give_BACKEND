@@ -1,9 +1,9 @@
 const express = require('express');
 const productService = require('../services/ProductService');
 
-const controller = express.Router();
+const router = express.Router();
 
-controller.post('/products', async (req, res) => {
+router.post('/products', async (req, res) => {
     try {
         const { name, description, uid, imageUrl, objectType, location } = req.body;
         const newProduct = await productService.createProduct(name, description, uid, imageUrl, objectType, location);
@@ -13,7 +13,7 @@ controller.post('/products', async (req, res) => {
     }
 });
 
-controller.get('/products/:id', async (req, res) => {
+router.get('/products/:id', async (req, res) => {
     try {
         const product = await productService.getProductById(req.params.id);
         res.status(200).json(product);
@@ -22,7 +22,7 @@ controller.get('/products/:id', async (req, res) => {
     }
 });
 
-controller.put('/products/:id', async (req, res) => {
+router.put('/products/:id', async (req, res) => {
     try {
         const { name, description, uid, imageUrl, objectType, location } = req.body;
         const updatedProduct = await productService.updateProduct(req.params.id, name, description, uid, imageUrl, objectType, location);
@@ -32,7 +32,7 @@ controller.put('/products/:id', async (req, res) => {
     }
 });
 
-controller.delete('/products/:id', async (req, res) => {
+router.delete('/products/:id', async (req, res) => {
     try {
         await productService.deleteProduct(req.params.id);
         res.status(204).send();
@@ -41,4 +41,4 @@ controller.delete('/products/:id', async (req, res) => {
     }
 });
 
-module.exports = controller;
+module.exports = router;
