@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const Product = require('../models/product');
+const Product = require('../models/Product');
 
 if (!admin.apps.length) {
     admin.initializeApp();

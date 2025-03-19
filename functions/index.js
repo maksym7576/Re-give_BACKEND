@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 const userRoutes = require('./src/routes/userRoutes');
-const { createProduct, getProductById, updateProduct, deleteProduct } = require('./controllers/productController');
+const { createProduct, getProductById, updateProduct, deleteProduct } = require('./src/controllers/ProductController');
 
 app.use(cors({ origin: true })); 
 app.use(express.json());

@@ -1,5 +1,5 @@
 const { onRequest } = require('firebase-functions/v2/https');
-const productService = require('../services/productService');
+const productService = require('../services/ProductService');
 
 const createProduct = onRequest(async (req, res) => {
     try {
