@@ -1,7 +1,9 @@
-const { onRequest } = require('firebase-functions/v2/https');
+const express = require('express');
 const productService = require('../services/ProductService');
 
-const createProduct = onRequest(async (req, res) => {
+const controller = express.Router();
+
+controller.post('/products', async (req, res) => {
     try {
         const { name, description, uid, imageUrl, objectType, location } = req.body;
         const newProduct = await productService.createProduct(name, description, uid, imageUrl, objectType, location);
@@ -11,35 +13,32 @@ const createProduct = onRequest(async (req, res) => {
     }
 });
 
-const getProductById = onRequest(async (req, res) => {
+controller.get('/products/:id', async (req, res) => {
     try {
-        const id = req.path.split('/').pop();
-        const product = await productService.getProductById(id);
+        const product = await productService.getProductById(req.params.id);
         res.status(200).json(product);
     } catch (error) {
         res.status(404).json({ error: error.message });
     }
 });
 
-const updateProduct = onRequest(async (req, res) => {
+controller.put('/products/:id', async (req, res) => {
     try {
-        const id = req.path.split('/').pop();
         const { name, description, uid, imageUrl, objectType, location } = req.body;
-        const updatedProduct = await productService.updateProduct(id, name, description, uid, imageUrl, objectType, location);
+        const updatedProduct = await productService.updateProduct(req.params.id, name, description, uid, imageUrl, objectType, location);
         res.status(200).json(updatedProduct);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
 
-const deleteProduct = onRequest(async (req, res) => {
+controller.delete('/products/:id', async (req, res) => {
     try {
-        const id= req.path.split('/').pop();
-        await productService.deleteProduct(id);
+        await productService.deleteProduct(req.params.id);
         res.status(204).send();
     } catch (error) {
         res.status(404).json({ error: error.message });
     }
 });
 
-module.exports = { createProduct, getProductById, updateProduct, deleteProduct };
+module.exports = controller;
