@@ -4,6 +4,6 @@ const { registerUser, loginUser, listOfUsersWithRole } = require('../controllers
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-// router.get('/users/roles', listOfUsersWithRole);
+router.get('/users/roles', listOfUsersWithRole);
 
 module.exports = router;
