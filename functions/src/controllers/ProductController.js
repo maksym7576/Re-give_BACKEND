@@ -36,7 +36,7 @@ const deleteProduct = onRequest(async (req, res) => {
     try {
         const id= req.path.split('/').pop();
         await productService.deleteProduct(id);
-        res.status(204).send("Product deleted successfully.");
+        res.status(204).send();
     } catch (error) {
         res.status(404).json({ error: error.message });
     }
