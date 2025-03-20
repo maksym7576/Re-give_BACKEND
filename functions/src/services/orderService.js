@@ -1,10 +1,7 @@
-// functions/src/services/orderService.js
 const orderRepository = require('../repositories/orderRepository');
 const Order = require('../models/order');
 
-// Сервіс для роботи з замовленнями
 const orderService = {
-    // Метод для створення нового замовлення
     async createOrder(productId, userId) {
         try {
             // Створюємо об'єкт замовлення
@@ -13,21 +10,20 @@ const orderService = {
             // Зберігаємо замовлення через репозиторій
             const orderId = await orderRepository.saveOrder(newOrder);
 
-            console.log(`✅ Створено нове замовлення з ID: ${orderId}`);
+            console.log(`Creating order: ${orderId}`);
             return orderId;
         } catch (error) {
-            console.error("❌ Помилка при створенні замовлення:", error);
-            throw new Error("Не вдалося створити замовлення");
+            console.error("Error while create an order:", error);
+            throw new Error("Error while create an order");
         }
     },
 
-    // Метод для отримання замовлення за ID
     async getOrderById(orderId) {
         try {
             return await orderRepository.findOrderById(orderId);
         } catch (error) {
-            console.error("❌ Помилка при отриманні замовлення:", error);
-            throw new Error("Не вдалося отримати замовлення");
+            console.error("Error while create an order:", error);
+            throw new Error("Error while create an order:");
         }
     }
 };
