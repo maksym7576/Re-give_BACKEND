@@ -4,10 +4,8 @@ const Order = require('../models/order');
 const orderService = {
     async createOrder(productId, userId) {
         try {
-            // Створюємо об'єкт замовлення
             const newOrder = new Order(productId, userId);
 
-            // Зберігаємо замовлення через репозиторій
             const orderId = await orderRepository.saveOrder(newOrder);
 
             console.log(`Creating order: ${orderId}`);
