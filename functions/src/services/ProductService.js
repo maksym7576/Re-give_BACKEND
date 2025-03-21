@@ -7,10 +7,20 @@ const createProduct = async (name, description, uid, imageUrl, objectType, locat
     return product;
 };
 
+const getProductsByUserUid = async (uid) => {
+    const products = await productRepository.getProductsByUserUid(uid);
+    return products;
+};
+
 const getProductById = async (id) => {
     const product = await productRepository.getProductById(id);
     return product;
 };
+
+const getAllProducts = async () => {
+    const products = await productRepository.getAllProducts();
+    return products;
+}
 
 const updateProduct = async (id, name, description, uid, imageUrl, objectType, location) => {
     const product = new Product(name, description, uid, imageUrl, objectType, location);
@@ -22,4 +32,4 @@ const deleteProduct = async (id) => {
     await productRepository.deleteProduct(id);
 };
 
-module.exports = { createProduct, getProductById, updateProduct, deleteProduct };
+module.exports = { createProduct, getProductById, updateProduct, deleteProduct, getProductsByUserUid, getAllProducts };

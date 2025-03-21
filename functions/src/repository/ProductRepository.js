@@ -22,6 +22,39 @@ const createProduct = async (product) => {
     return product;
 };
 
+const getProductsByUserUid = async (uid) => {
+    const productsRef = db.collection('products');
+    const snapshot = await productsRef.where('uid', '==', uid).get();
+
+    if (snapshot.empty) {
+        throw new Error('No products found for this user');
+    }
+
+    const products = [];
+    snapshot.forEach((doc) => {
+        const data = doc.data();
+        products.push(new Product(data.name, data.description, data.uid, data.imageUrl, data.objectType, data.location));
+    });
+
+    return products;
+};
+
+const getAllProducts = async () => {
+    const productsRef = db.collection('products');
+    const snapshot = await productsRef.get();
+
+    if (snapshot.empty) {
+        return [];
+    }
+
+    const products = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return new Product(data.name, data.description, data.uid, data.imageUrl, data.objectType, data.location);
+    });
+
+    return products;
+};
+
 const getProductById = async (id) => {
     const productRef = db.collection('products').doc(id);
     const doc = await productRef.get();
@@ -49,4 +82,4 @@ const deleteProduct = async (id) => {
     await productRef.delete();
 };
 
-module.exports = { getProductById, createProduct, updateProduct, deleteProduct };
+module.exports = { getProductById, createProduct, updateProduct, deleteProduct, getProductsByUserUid, getAllProducts };
