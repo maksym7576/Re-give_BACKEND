@@ -1,10 +1,9 @@
 class Order {
-    constructor(productId, userId, isPaid = false, isShipped = false) {
+    constructor(productId, userId, isAccepted = false, isFinished = false) {
         this.productId = productId;
         this.userId = userId;
-        this.isPaid = isPaid;
-        this.isShipped = isShipped;
-        this.createdAt = new Date();
+        this.isAccepted = isAccepted;
+        this.isFinished = isFinished;
     }
 }
 

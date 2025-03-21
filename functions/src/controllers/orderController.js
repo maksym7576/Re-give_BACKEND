@@ -1,6 +1,6 @@
 const orderService = require('../services/orderService');
 
-// Функція для створення замовлення
+
 exports.createOrder = async (req, res) => {
     try {
         let productId, userId;
@@ -39,7 +39,7 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrderById = async (req, res) => {
     try {
-        const { orderId } = req.params;
+        const {orderId} = req.params;
 
         if (!orderId) {
             return res.status(400).json({
@@ -70,3 +70,26 @@ exports.getOrderById = async (req, res) => {
         });
     }
 };
+
+    exports.deleteOrder = async (req, res) => {
+        console.log("start deleting an order")
+        try {
+            const { orderId, uid } = req.params;
+            if (!orderId || !uid) {
+                return res.status(400).json({
+                    success: false,
+                    error: "OrderId is not exists"
+                });
+            }
+            await orderService.deleteOrderById(orderId, uid);
+            return res.status(200).json({
+                success: true,
+                order: "Deleted successful by ID"
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                error: "Server error"
+            });
+        }
+    };

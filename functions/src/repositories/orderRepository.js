@@ -33,6 +33,17 @@ const orderRepository = {
             console.error("Error to find an order:", error);
             throw error;
         }
+    },
+
+    async deleteOrderById(orderId) {
+        try {
+            await db.collection('orders').doc(orderId).delete();
+            console.log("Order was deleted");
+            return true;
+        } catch (error) {
+            console.error("Error deleting order:", error);
+            throw error;
+        }
     }
 };
 

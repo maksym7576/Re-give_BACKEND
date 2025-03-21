@@ -14,4 +14,19 @@ async function setUserRole(uid, role) {
     }
 }
 
-module.exports = { setUserRole };
+async function getUserByUid(uid) {
+    try {
+        const userRecord = await admin.auth().getUser(uid);
+        return {
+            success: true,
+            user: userRecord
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: 'User not found'
+        };
+    }
+}
+
+module.exports = { setUserRole, getUserByUid };
