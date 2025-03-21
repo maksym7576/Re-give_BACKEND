@@ -1,11 +1,14 @@
 const express = require('express');
 const productService = require('../services/ProductService');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.post('/products', async (req, res) => {
+router.post('/products', authMiddleware, async (req, res) => {
     try {
-        const { name, description, uid, imageUrl, objectType, location } = req.body;
+        const { name, description, imageUrl, objectType, location } = req.body;
+        const uid = req.user.uid;
+
         const newProduct = await productService.createProduct(name, description, uid, imageUrl, objectType, location);
         res.status(201).json(newProduct);
     } catch (error) {

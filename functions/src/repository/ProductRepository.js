@@ -7,16 +7,6 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-const getProductById = async (id) => {
-    const productRef = db.collection('products').doc(id);
-    const doc = await productRef.get();
-    if (!doc.exists) {
-        throw new Error('Product not found');
-    }
-    const data = doc.data();
-    return new Product(data.name, data.description, data.uid, data.imageUrl, data.objectType, data.location);
-};
-
 const createProduct = async (product) => {
     const productRef = db.collection('products').doc();
     const newProduct = {
@@ -30,6 +20,16 @@ const createProduct = async (product) => {
     await productRef.set(newProduct);
     product.id = productRef.id;
     return product;
+};
+
+const getProductById = async (id) => {
+    const productRef = db.collection('products').doc(id);
+    const doc = await productRef.get();
+    if (!doc.exists) {
+        throw new Error('Product not found');
+    }
+    const data = doc.data();
+    return new Product(data.name, data.description, data.uid, data.imageUrl, data.objectType, data.location);
 };
 
 const updateProduct = async (id, product) => {
