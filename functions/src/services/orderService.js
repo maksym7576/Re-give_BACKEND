@@ -1,6 +1,8 @@
 const orderRepository = require('../repositories/orderRepository');
 const Order = require('../models/order');
 const { getUserByUid } = require("../services/authService");
+const productService = require('../services/ProductService');
+const OrderWithProductDTO = require('../dtos/orderWithProductDTO');
 const orderService = {
     async createOrder(productId, userId) {
         try {
@@ -45,6 +47,25 @@ const orderService = {
             throw new Error("Error while deleting an order")
         }
     },
+
+    async userOrdersWithProductData(userId) {
+        const ordersSnapshot = await orderRepository.getAllProductsByUserId(userId);
+        const ordersList = ordersSnapshot.docs.map(doc => doc.data());
+        const ordersWithProductsList = [];
+        for (const order of ordersList) {
+            const product = await productService.getProductById(order.productId);
+            if (!product) {
+                continue;
+            }
+            ordersWithProductsList.push(new OrderWithProductDTO(order, product));
+        }
+
+        return ordersWithProductsList;
+    }
+
+
+
+
 };
 
 module.exports = orderService;

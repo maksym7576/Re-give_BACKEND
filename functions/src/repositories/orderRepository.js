@@ -44,7 +44,18 @@ const orderRepository = {
             console.error("Error deleting order:", error);
             throw error;
         }
-    }
+    },
+
+    async getAllProductsByUserId(userId) {
+        try {
+            const snapshot = await db.collection('orders')
+                .where('userId', '==', userId)
+                .get();
+            return snapshot;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 module.exports = orderRepository;
