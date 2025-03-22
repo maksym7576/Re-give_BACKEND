@@ -1,5 +1,5 @@
 const Product = require('../models/Product');
-const productRepository = require('../repository/ProductRepository');
+const productRepository = require('../repositories/ProductRepository');
 
 const createProduct = async (name, description, uid, imageUrl, objectType, location) => {
     const product = new Product(name, description, uid, imageUrl, objectType, location);

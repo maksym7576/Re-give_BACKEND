@@ -3,6 +3,7 @@ const Order = require('../models/order');
 const { getUserByUid } = require("../services/authService");
 const productService = require('../services/ProductService');
 const OrderWithProductDTO = require('../dtos/orderWithProductDTO');
+const productWithOrdersDTO = require('../dtos/productWithOrdersDTO');
 const orderService = {
     async createOrder(productId, userId) {
         try {
@@ -93,11 +94,34 @@ const orderService = {
         }
 
         return ordersWithProductsList;
+    },
+
+    async getOrdersByProductId(productId) {
+        try {
+            const orders = await orderRepository.findOrdersByProductId(productId);
+            if (!orders.length) {
+                return [];
+            }
+
+            const ordersWithProductData = [];
+
+            for (const order of orders) {
+                const product = await productService.getProductById(order.productId);
+                const user = await getUserByUid(product.uid);
+                console.log("userId: ", user.user.email);
+                if (!product || !user) {
+                    continue;
+                }
+
+                ordersWithProductData.push(new productWithOrdersDTO(order, product, user.user));
+            }
+
+            return ordersWithProductData;
+        }catch (error) {
+            console.error("Error while fetching orders by productId:", error);
+            throw new Error("Error while fetching orders by productId");
+        }
     }
-
-
-
-
 };
 
 module.exports = orderService;

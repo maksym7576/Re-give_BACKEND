@@ -143,3 +143,37 @@ exports.getUserOrdersWithProductData = async (req, res) => {
         });
     }
 };
+
+exports.getOrdersByProduct = async (req, res) => {
+    try {
+        const { productId } = req.params;
+
+        if (!productId) {
+            return res.status(400).json({
+                success: false,
+                error: "ProductId is required"
+            });
+        }
+
+        const ordersWithProductData = await orderService.getOrdersByProductId(productId);
+
+        if (!ordersWithProductData.length) {
+            return res.status(404).json({
+                success: false,
+                error: "No orders found for this product"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            orders: ordersWithProductData
+        });
+
+    } catch (error) {
+        console.error("Error fetching orders by product:", error);
+        return res.status(500).json({
+            success: false,
+            error: "Server error"
+        });
+    }
+};
