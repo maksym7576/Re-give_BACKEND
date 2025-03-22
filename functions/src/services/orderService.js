@@ -16,6 +16,38 @@ const orderService = {
         }
     },
 
+    async acceptOrder(orderId, userId, productId) {
+        try {
+            const orders = await orderRepository.findOrdersByProductId(productId);
+
+            const orderToAccept = orders.find(order => order.id === orderId && order.userId !== userId);
+            if (!orderToAccept) {
+                throw new Error("Order not found or it's your own order, you can't accept it");
+            }
+
+            await orderRepository.updateOrder(orderId, {
+                isAccepted: true,
+                isFinished: true
+            });
+
+            for (const order of orders) {
+                if (order.id !== orderId && order.productId === productId) {
+                    await orderRepository.updateOrder(order.id, {
+                        isAccepted: false,
+                        isFinished: true
+                    });
+                }
+            }
+
+            console.log(`Order ${orderId} accepted successfully by user ${userId}`);
+            return true;
+
+        } catch (error) {
+            console.error("Error while accepting the order:", error);
+            throw new Error("Error while accepting the order");
+        }
+    },
+
     async getOrderById(orderId) {
         try {
             console.log(`Order was found by id:, ${orderId}`);

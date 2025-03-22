@@ -37,6 +37,40 @@ exports.createOrder = async (req, res) => {
     }
 };
 
+exports.acceptOrder = async (req, res) => {
+    try {
+        const { orderId, userId, productId } = req.params;
+
+        if (!orderId || !userId || !productId) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing orderId, userId or productId"
+            });
+        }
+
+        const success = await orderService.acceptOrder(orderId, userId, productId);
+
+        if (success) {
+            return res.status(200).json({
+                success: true,
+                message: `Order ${orderId} accepted successfully by user ${userId}`
+            });
+        } else {
+            return res.status(404).json({
+                success: false,
+                error: "Order not found or not accepted"
+            });
+        }
+
+    } catch (error) {
+        console.error("Error while accepting an order:", error);
+        return res.status(500).json({
+            success: false,
+            error: "Server error"
+        });
+    }
+};
+
 exports.getOrderById = async (req, res) => {
     try {
         const {orderId} = req.params;

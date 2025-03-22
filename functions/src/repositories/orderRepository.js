@@ -17,6 +17,38 @@ const orderRepository = {
         }
     },
 
+    async findOrdersByProductId(productId) {
+        try {
+            const snapshot = await db.collection('orders').where('productId', '==', productId).get();
+            if (snapshot.empty) {
+                return [];
+            }
+
+            const orders = [];
+            snapshot.forEach(doc => {
+                orders.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            return orders;
+        } catch (error) {
+            console.error("Error finding orders by productId:", error);
+            throw error;
+        }
+    },
+
+    async updateOrder(orderId, updatedData) {
+        try {
+            const orderRef = db.collection('orders').doc(orderId);
+            await orderRef.update(updatedData);
+            console.log(`Order ${orderId} updated successfully`);
+        } catch (error) {
+            console.error("Error updating order:", error);
+            throw error;
+        }
+    },
+
     async findOrderById(orderId) {
         try {
             const doc = await db.collection('orders').doc(orderId).get();
