@@ -13,8 +13,12 @@ const getProductsByUserUid = async (uid) => {
 };
 
 const getProductById = async (id) => {
-    const product = await productRepository.getProductById(id);
-    return product;
+    try {
+        const product = await productRepository.getProductById(id);
+        return product;
+    } catch (error) {
+        throw error;
+    }
 };
 
 const getAllProducts = async () => {
