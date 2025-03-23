@@ -15,7 +15,7 @@ async function registerUser(req, res) {
             role: 'user'
         };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '30d' });
-        res.status(200).json({ token, uid: userRecord.uid, message: 'User registered successfully' });
+        res.status(200).json({ token, uid: userRecord.uid, role: 'user' });
     } catch (error) {
         console.error("Error ", error);
         res.status(500).json({ error: error.message });
@@ -33,7 +33,7 @@ async function loginUser(req, res) {
             role: role
         };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '30d' });
-        res.status(200).json({ token, uid: userRecord.uid, message: 'User logged in successfully.' });
+        res.status(200).json({ token, uid: userRecord.uid, role: role });
     } catch (error) {
         console.error("Error ", error);
         res.status(500).json({ error: error.message });
