@@ -3,6 +3,7 @@ const Order = require('../models/order');
 const { getUserByUid } = require("../services/authService");
 const productService = require('../services/ProductService');
 const OrderWithProductDTO = require('../dtos/orderWithProductDTO');
+const productWithOrdersDTO = require('../dtos/productWithOrdersDTO');
 const orderService = {
     async createOrder(productId, userId) {
         try {
@@ -15,6 +16,38 @@ const orderService = {
         } catch (error) {
             console.error("Error while create an order:", error);
             throw new Error("Error while create an order");
+        }
+    },
+
+    async acceptOrder(orderId, userId, productId) {
+        try {
+            const orders = await orderRepository.findOrdersByProductId(productId);
+
+            const orderToAccept = orders.find(order => order.id === orderId && order.userId !== userId);
+            if (!orderToAccept) {
+                throw new Error("Order not found or it's your own order, you can't accept it");
+            }
+
+            await orderRepository.updateOrder(orderId, {
+                isAccepted: true,
+                isFinished: true
+            });
+
+            for (const order of orders) {
+                if (order.id !== orderId && order.productId === productId) {
+                    await orderRepository.updateOrder(order.id, {
+                        isAccepted: false,
+                        isFinished: true
+                    });
+                }
+            }
+
+            console.log(`Order ${orderId} accepted successfully by user ${userId}`);
+            return true;
+
+        } catch (error) {
+            console.error("Error while accepting the order:", error);
+            throw new Error("Error while accepting the order");
         }
     },
 
@@ -61,11 +94,34 @@ const orderService = {
         }
 
         return ordersWithProductsList;
+    },
+
+    async getOrdersByProductId(productId) {
+        try {
+            const orders = await orderRepository.findOrdersByProductId(productId);
+            if (!orders.length) {
+                return [];
+            }
+
+            const ordersWithProductData = [];
+
+            for (const order of orders) {
+                const product = await productService.getProductById(order.productId);
+                const user = await getUserByUid(product.uid);
+                console.log("userId: ", user.user.email);
+                if (!product || !user) {
+                    continue;
+                }
+
+                ordersWithProductData.push(new productWithOrdersDTO(order, product, user.user));
+            }
+
+            return ordersWithProductData;
+        }catch (error) {
+            console.error("Error while fetching orders by productId:", error);
+            throw new Error("Error while fetching orders by productId");
+        }
     }
-
-
-
-
 };
 
 module.exports = orderService;
