@@ -46,14 +46,21 @@ const getAllProducts = async () => {
     if (snapshot.empty) {
         return [];
     }
-
     const products = snapshot.docs.map(doc => {
         const data = doc.data();
-        return new Product(doc.id, data.name, data.description, data.uid, data.imageUrl, data.objectType, data.location);
+        return {
+            id: doc.id,
+            name: data.name,
+            description: data.description,
+            uid: data.uid,
+            imageUrl: data.imageUrl,
+            objectType: data.objectType,
+            location: data.location
+        };
     });
-
     return products;
 };
+
 
 const getProductById = async (id) => {
     const productRef = db.collection('products').doc(id);
