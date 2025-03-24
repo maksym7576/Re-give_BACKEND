@@ -49,7 +49,7 @@ const getAllProducts = async () => {
 
     const products = snapshot.docs.map(doc => {
         const data = doc.data();
-        return new Product(data.name, data.description, data.uid, data.imageUrl, data.objectType, data.location);
+        return new Product(doc.id, data.name, data.description, data.uid, data.imageUrl, data.objectType, data.location);
     });
 
     return products;

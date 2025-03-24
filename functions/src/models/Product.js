@@ -1,11 +1,20 @@
 class Product {
-    constructor(name, description, uid, imageUrl, objectType, location) {
+    constructor(id, name, description, uid, imageUrl, objectType, location) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.uid = uid;
         this.imageUrl = imageUrl;
         this.objectType = objectType;
         this.location = location;
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    set id(value) {
+        this._id = value;
     }
 
     get name() {
