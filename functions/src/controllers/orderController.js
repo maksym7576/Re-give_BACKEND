@@ -135,7 +135,7 @@ exports.getUserOrdersWithProductData = async (req, res) => {
                 error: "No orders found for this user"
             });
         }
-        return res.status(200).json({ orders: ordersWithProducts });
+        return res.status(200).json(ordersWithProducts);
     } catch (error) {
         console.error("Error while fetching user orders with products:", error);
         return res.status(500).json({
@@ -143,6 +143,7 @@ exports.getUserOrdersWithProductData = async (req, res) => {
         });
     }
 };
+
 
 exports.getOrdersByProduct = async (req, res) => {
     try {
